@@ -1,0 +1,104 @@
+#!/bin/csh
+#$ -N RoundUpMerge
+#$ -e {0}
+#$ -o {0}
+#$ -p 0
+#$ -l fsize=4096M
+#$ -l mem_free=4096M
+#$ -l s_rss=4096M
+#$ -l ct=24:00:00
+#$ -l os=sl6
+#$ -P P_hess -cwd
+#$ -M {mail}
+#$ -m be
+
+source /afs/in2p3.fr/throng/hess/HESS_Soft_0-8-32/env.csh
+fs flushv /afs/in2p3.fr/throng/hess
+if ( ! $?TMPDIR ) setenv TMPDIR `pwd`
+
+if ( ! $?TMPBATCH ) setenv TMPBATCH $TMPDIR
+
+unsetenv HPSS
+setenv XROOTD root://ccxroot:1999//hpss/in2p3.fr/group/hess
+
+#cd $TMPBATCH
+
+
+ln -fs  $HESSROOT/parisanalysis/scripts/rootlogon.C .
+
+env
+
+{1}
+
+cat > merge_Stereo_{2}.C  << EOF
+void merge_Stereo_{2}()
+{
+if(gROOT->IsBatch())
+  gSystem->Load("libGui.so");
+gROOT->SetStyle("Plain");
+gStyle->SetOptFit(111);
+gStyle->SetPalette(1);
+//===================
+// = Analysis
+
+gSystem->Load("librootparisanalysis.so");
+gSystem->Load("librootparisrunquality.so");
+gSystem->Load("librootparisanalysisCommon.so");
+gSystem->Load("librootparisanalysis_scripts.so");
+
+
+//=============================================
+
+//===================
+// = Path
+use_analysis();
+set_tables_path("/sps/hess/prod/SpectrumTables/HESS_Soft_0-8-32_HESSII_Prod8");
+//set_dst_path(Storage_XROOTD,"root://ccxroot:1999//hpss/in2p3.fr/group/hess/DST");
+set_verbose(false);
+//===================
+// = Substractions =
+set_histotheta2max(0.1);
+set_histotheta2nbins(60);
+use_ring_background(true);
+use_full_background(false);
+use_gamma_fov_storage(false);
+use_multipleoff_background(true);
+multipleoff_background_optimize_regions(false);
+multipleoff_background_normalizefullhisto(false);
+multipleoff_background_exclude_onoff(true);
+multipleoff_set_n_offregions(-1);
+multipleoff_use_acceptance_gradient(true);
+use_onoff_background(false);
+//===================
+// = Maps =
+set_mapextension(2,2);
+set_mapbinsize(0.02);
+set_oversampling_size(0.1);
+generate_acceptance(true);
+use_radialacceptance(false);
+use_zenithdependant_acceptance(true);
+use_ring_backgroundmap(true,true,true);
+use_adaptivering_backgroundmap(false);
+use_template_background(true);
+use_onoff_backgroundmap(false);
+set_gradient_correction_max_angle(2);
+set_gradient_correction_max_gradient(0.125);
+set_purge_merging_files(0);
+
+// set_chain_name("{3}");
+
+// = Run List
+{5}
+
+merge_runs("{3}",true,false,0.100000);
+merge_run_tuples("{3}");
+gApplication->Terminate(0);
+}
+EOF
+root -q -b merge_Stereo_{2}.C
+mkdir -p {4}
+rm *run*.root
+
+mv Results_{3}.root {4}
+
+rm merge_Stereo_{2}.C
