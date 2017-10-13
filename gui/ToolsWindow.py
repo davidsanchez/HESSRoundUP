@@ -98,17 +98,17 @@ class ToolsWindow(gtk.HBox):
 
 
         #Start button
-        self.exec_button = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start ONOFFTest")
+        self.exec_button = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "ONOFF Test @ Pos")
         self.exec_button.connect("clicked", self.start_ONOFFTest)
         # h1.pack_start(self.exec_button, expand=False, fill=False, padding=1)
-        t3.attach(self.exec_button, 1, 2,5,6, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        t3.attach(self.exec_button, 0, 2,5,6, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         #Start button
-        self.exec_buttonFP = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start FindPosition")
+        self.exec_buttonFP = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Info @ Pos")
         self.exec_buttonFP.connect("clicked", self.start_findPos)
         # h1.pack_start(self.exec_buttonFP, expand=False, fill=False, padding=1)
-        t3.attach(self.exec_buttonFP, 2,3,5,6, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        t3.attach(self.exec_buttonFP, 2,4,5,6, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         f2 = gtk.Frame("Tools ")
@@ -125,7 +125,7 @@ class ToolsWindow(gtk.HBox):
 
 
         #Start button
-        self.exec_buttonFindspot = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start FindHotSpot")
+        self.exec_buttonFindspot = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Find Hot Spot (Significance) ")
         self.exec_buttonFindspot.connect("clicked", self.start_FindHotSpot)
         # h1.pack_start(self.exec_buttonFindspot, expand=False, fill=False, padding=1)
         ttools.attach(self.exec_buttonFindspot, 1,2, 2,3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
@@ -140,6 +140,13 @@ class ToolsWindow(gtk.HBox):
         self.MinSig_entry.set_numeric(True)
         self.MinSig_entry.set_size_request(30, -1);
         ttools.attach(self.MinSig_entry, 3,4, 2,3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1) 
+
+
+        #Start button
+        self.exec_buttonFindspot = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Find Hot Spot (ONOFF) ")
+        self.exec_buttonFindspot.connect("clicked", self.start_FindHotSpotONOFF)
+        # h1.pack_start(self.exec_buttonFindspot, expand=False, fill=False, padding=1)
+        ttools.attach(self.exec_buttonFindspot, 1,2, 3,4, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         #Start button
@@ -347,6 +354,56 @@ class ToolsWindow(gtk.HBox):
             root_opts =  "-l"
             MinSig = self.MinSig_entry.get_value();
             batchfile.write_line("root %s '%s.C+(\"%s,%d,%i\")'" % (root_opts, "hotspotposition",folder+"/"+prefix,MinSig,1))
+#               batchfile.save_result_file(".", "*.root", ".")
+                
+            r, jobname = batchfile.submit(terminal=True)
+
+        except Exception, x:
+            traceback.print_exc()
+            ErrorDialogs.show_error(str(x))
+        self.mainwindow.normal_cursor()
+
+
+    def start_FindHotSpotONOFF(self, widget=None, selection=None, * args):
+        '''
+        run hotspotposition.C
+        '''
+
+        if not self.mainwindow.validate_batchsystem():
+            return
+        try:
+
+
+            rootfiles = self.list.get_selection_info()
+            if len(rootfiles) == 0:
+                ErrorDialogs.Error("No ROOT files selected! Please load the list and select the ROOT files you want to process.")
+            if len(rootfiles) > 1:
+                ErrorDialogs.Error("Select only 1 ROOT file.")
+
+            prefix = getPrefix(rootfiles[0])
+#            folder = self.mainwindow.get_batchsystem().storage.find_directory(Storage.DIR_RESULTS).get_base_directory()
+
+            folder = self.fin.get_current_folder()
+
+
+            batchfilename = "FindHotSpot_"
+            filename = "FindHotSpot"
+            batchfile = self.mainwindow.get_batchfile(batchfilename,filename,
+                                                          [Storage.DIR_DST,
+                                                           Storage.DIR_TABLES,
+                                                           Storage.DIR_RESULTS,
+                                                           Storage.DIR_CALIBRATION],
+                                                          "HEGS")
+
+               #TODO official location of the code
+            batchfile.write_line("ln -s $HESSUSER/RoundUpCode//hotspotposition.C . ")
+            batchfile.write_line("ln -s $HESSUSER/RoundUpCode/rootlogon.C . ")
+#            batchfile.write_line("ln -s "+self.fin.get_current_folder()+"/"+prefix+"_MapGenerationInfos.txt . ")
+
+
+            root_opts =  "-l"
+            MinSig = self.MinSig_entry.get_value();
+            batchfile.write_line("root %s '%s.C+(\"%s,%d,%i\")'" % (root_opts, "hotspotposition",folder+"/"+prefix,MinSig,0))
 #               batchfile.save_result_file(".", "*.root", ".")
                 
             r, jobname = batchfile.submit(terminal=True)
