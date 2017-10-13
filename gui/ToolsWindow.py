@@ -55,8 +55,8 @@ class ToolsWindow(gtk.HBox):
        ##############################################################################
         # ==== default values ====
         self.ra_mode = True
-        self.ra = 329.7167
-        self.dec = -30.2256
+        self.ra = 0.
+        self.dec = 0.
   
         f = gtk.Frame("Target ")
         h1.pack_start(f, expand=False, fill=False, padding=5)

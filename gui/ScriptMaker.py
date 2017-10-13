@@ -51,6 +51,16 @@ class ScriptMaker(Loggin.Message):
 
             balise = '{5}'
             AT = AT.replace(balise,self.Library+'/'+self.period+"/out/")
+            
+            balise = '{6}'
+            AT = AT.replace(balise,os.getenv("HESSROOT"))
+            
+            balise = '{7}'
+            AT = AT.replace(balise,os.getenv("SPECTRUM_PATH"))
+            
+            balise = '{8}'
+            AT = AT.replace(balise,self.runlist_info[key]["TargetName"].replace(" ","").replace("+","p").replace("-","m"))
+            
             os.system("mkdir -p "+self.Library+'/'+self.period+"/Scripts/")
             os.system("mkdir -p "+self.Library+'/'+self.period+"/out/")
             scriptname = self.Library+'/'+self.period+"/Scripts/analysis"+str(int(key))+"_"+self.cut+".csh"

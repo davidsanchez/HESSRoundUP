@@ -243,10 +243,13 @@ class MapsWindow(gtk.HBox):
 
                batchfile.write_line("ln -s "+self.fin.get_current_folder()+"/"+rf+" . ")
                root_opts =  "-q -b"
+               if self.UseConfigTarget :
+                    self.ra = 0
+                    self.dec = 0
                batchfile.write_line("root %s '%s.C(\"%s\",\"%s\",%s,%s,%s)'" % (root_opts, filename,rf,prefix+'_roundup',self.UseConfigTarget,self.ra,self.dec))
                batchfile.write_line("rm "+rf)
-               batchfile.write_line("cp *root "+self.fin.get_current_folder())
-               batchfile.write_line("cp *png "+self.fin.get_current_folder())
+               batchfile.write_line("cp *roundup*root "+self.fin.get_current_folder())
+               batchfile.write_line("cp *roundup*png "+self.fin.get_current_folder())
 #               batchfile.save_result_file(".", "*.root", "." , )
 ##               batchfile.save_result_file(".", "*.txt" , ".", "")
 #               batchfile.save_result_file(".", "*.png" , ".",  "")
@@ -286,7 +289,7 @@ class MapsWindow(gtk.HBox):
 
     def set_target_list(self, targets):
         self.target_list.clear()
-        self.target_list.set_popdown_strings(targets)   
+        self.target_list.set_completion_strings(targets)   
 
     ##
     ## Lookup target position in database

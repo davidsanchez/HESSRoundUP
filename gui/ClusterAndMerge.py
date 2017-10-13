@@ -196,6 +196,12 @@ class MergeMaker(Loggin.Message):
             balise = '{5}'
             AT = AT.replace(balise,runlist)
 
+            balise = '{6}'
+            AT = AT.replace(balise,os.getenv("HESSROOT"))
+
+            balise = '{7}'
+            AT = AT.replace(balise,os.getenv("SPECTRUM_PATH"))
+
             self.info("Work on Target "+self.runlist[run]["TargetName"])
 
             if OnlyPeriod:
@@ -203,6 +209,7 @@ class MergeMaker(Loggin.Message):
                scriptname = "Merge"+str(int(key))+"_"+self.cut+".csh"
             else:
                path = self.Maps+"/Scripts/"
+               os.system('mkdir '+path)
                scriptname = "Merge"+str(int(key))+"_"+self.cut+".csh"
 
             
