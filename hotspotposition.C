@@ -111,7 +111,7 @@ int FindSpot(TH2F* SigMap,float SigMin,float RegionSize, float vpx[1000], float 
 	return nbspot;
 }
 
-void hotspotposition(const char* Prefix )
+void hotspotposition(const char* Prefix ,double MinSig = 4.5)
 {
                 std::ostringstream MapFile;
                 MapFile << Prefix<< "_roundup_RingBgMaps.root";      
@@ -126,7 +126,7 @@ void hotspotposition(const char* Prefix )
 
 		TH2F *SpotMap = new TH2F(*hSig);
 		
-		int nbspot = FindSpot(SpotMap,4.5,0.5,vpx,vpy,vmax);
+		int nbspot = FindSpot(SpotMap,MinSig,0.5,vpx,vpy,vmax);
 
 		
                 std::cout  << MapFile.str().c_str()<< std::endl;
@@ -134,7 +134,33 @@ void hotspotposition(const char* Prefix )
 		{
 			std::cout  << " " << i+1 << " " << -vpx[i] << " " << vpy[i] <<" Max Sig "<<vmax[i]<< std::endl;
 		}
-                if (nbspot==0) 	std::cout  << "No Hot spot found at 4.5 sigma, Observe More! "<<std::endl;
+                if (nbspot==0) 	std::cout  << "No Hot spot found at "<<MinSig<<" sigma, Observe More! "<<std::endl;
 	
 }
 
+void hotspotpositionONOFF(const char* Prefix ,double MinSig = 4.5)
+{
+                std::ostringstream MapFile;
+                MapFile << Prefix<< "_roundup_ONOFFTestMaps.root";      
+      		TFile *rootfile_All = TFile::Open(MapFile.str().c_str());
+      		Display::SkyHistogram2D *hSig = (Display::SkyHistogram2D *)rootfile_All->->Get("ONOFFTest");
+
+
+		float vpx[1000];
+		float vpy[1000];
+		float vmax[1000];
+
+
+		TH2F *SpotMap = new TH2F(*hSig);
+		
+		int nbspot = FindSpot(SpotMap,MinSig,0.5,vpx,vpy,vmax);
+
+		
+                std::cout  << MapFile.str().c_str()<< std::endl;
+		for (int i=0;i<nbspot;i++) 
+		{
+			std::cout  << " " << i+1 << " " << -vpx[i] << " " << vpy[i] <<" Max Sig "<<vmax[i]<< std::endl;
+		}
+                if (nbspot==0) 	std::cout  << "No Hot spot found at "<<MinSig<<" sigma, Observe More! "<<std::endl;
+	
+}
