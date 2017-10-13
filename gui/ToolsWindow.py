@@ -64,7 +64,7 @@ class ToolsWindow(gtk.HBox):
         f.add(t3)
 
 
-        t3.attach(gtk.Label("Target"), 0, 1, 2, 3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        t3.attach(gtk.Label("Target Name"), 0, 1, 2, 3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
         self.target_list = gtk_supp.EntryCompletion(0)
         self.target_list.set_size_request(150, -1)
         t3.attach(self.target_list, 1, 2, 2, 3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
@@ -95,10 +95,16 @@ class ToolsWindow(gtk.HBox):
         t3.attach(self.dec_entry, 2, 3, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1) 
 
 
+        f2 = gtk.Frame("Tools ")
+        h2.pack_start(f2, expand=False, fill=False, padding=5)
+        ttools= gtk.Table(3, 2)
+        f2.add(ttools)
+
         #Start button
         self.exec_button = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start ONOFFTest")
         self.exec_button.connect("clicked", self.start_ONOFFTest)
-        h1.pack_start(self.exec_button, expand=False, fill=False, padding=1)
+        # h1.pack_start(self.exec_button, expand=False, fill=False, padding=1)
+        t3.attach(self.exec_button, 1, 2, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         #Start button
