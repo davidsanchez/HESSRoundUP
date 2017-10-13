@@ -105,14 +105,14 @@ class ToolsWindow(gtk.HBox):
         self.exec_button = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start ONOFFTest")
         self.exec_button.connect("clicked", self.start_ONOFFTest)
         # h1.pack_start(self.exec_button, expand=False, fill=False, padding=1)
-        ttools.attach(self.exec_button, 1, 2,3,4, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        ttools.attach(self.exec_button, 1, 2,1,2, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         #Start button
         self.exec_buttonFP = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start FindPosition")
         self.exec_buttonFP.connect("clicked", self.start_findPos)
         # h1.pack_start(self.exec_buttonFP, expand=False, fill=False, padding=1)
-        ttools.attach(self.exec_buttonFP, 1, 2, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        ttools.attach(self.exec_buttonFP, 2,3,1,2, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         # #Start button
@@ -126,13 +126,18 @@ class ToolsWindow(gtk.HBox):
         self.exec_buttonFindspot = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start FindHotSpot")
         self.exec_buttonFindspot.connect("clicked", self.start_FindHotSpot)
         # h1.pack_start(self.exec_buttonFindspot, expand=False, fill=False, padding=1)
-        ttools.attach(self.exec_buttonFindspot, 2,3, 3,4, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        ttools.attach(self.exec_buttonFindspot, 1,2, 2,3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+
+
+        self.minsig_label = gtk.Label("Min Significance :")
+        ttools.attach(self.minsig_label, 2,3, 2,3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+
 
 
         self.MinSig_entry = gtk.SpinButton(gtk.Adjustment(self.MinSig, 0, 90, .1), .1, 4)
         self.MinSig_entry.set_numeric(True)
         self.MinSig_entry.set_size_request(30, -1);
-        t3.attach(self.MinSig_entry, 2, 3, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1) 
+        ttools.attach(self.MinSig_entry, 3,4, 2,3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1) 
 
 
         #Start button
