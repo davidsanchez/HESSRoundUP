@@ -104,13 +104,21 @@ class ToolsWindow(gtk.HBox):
         self.exec_button = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start ONOFFTest")
         self.exec_button.connect("clicked", self.start_ONOFFTest)
         # h1.pack_start(self.exec_button, expand=False, fill=False, padding=1)
-        t3.attach(self.exec_button, 1, 2, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        ttools.attach(self.exec_button, 1, 2, ,3,4, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         #Start button
         self.exec_buttonFP = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start FindPosition")
         self.exec_buttonFP.connect("clicked", self.start_findPos)
-        h1.pack_start(self.exec_buttonFP, expand=False, fill=False, padding=1)
+        # h1.pack_start(self.exec_buttonFP, expand=False, fill=False, padding=1)
+        ttools.attach(self.exec_buttonFP, 1, 2, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+
+
+        # #Start button
+        # self.exec_buttonFP = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start FindPosition")
+        # self.exec_buttonFP.connect("clicked", self.start_findPos)
+        # # h1.pack_start(self.exec_buttonFP, expand=False, fill=False, padding=1)
+        # ttools.attach(self.exec_buttonFP, 1, 2, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         #Start button
