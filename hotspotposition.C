@@ -114,7 +114,7 @@ int FindSpot(TH2F* SigMap,float SigMin,float RegionSize, float vpx[1000], float 
 void hotspotposition(const char* Prefix ,double MinSig = 4.5,bool SignMap = 1)
 {
         std::ostringstream MapFile;
-        if SignMap {
+        if (SignMap) {
                 MapFile << Prefix<< "_roundup_RingBgMaps.root";      
       			TFile *rootfile_All = TFile::Open(MapFile.str().c_str());
       			Display::SkyHistogram2D *hSig = (Display::SkyHistogram2D *)rootfile_All->Get("SignificanceMap");
