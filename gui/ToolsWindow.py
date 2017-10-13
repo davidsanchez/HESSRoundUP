@@ -96,7 +96,7 @@ class ToolsWindow(gtk.HBox):
 
 
         f2 = gtk.Frame("Tools ")
-        h2.pack_start(f2, expand=False, fill=False, padding=5)
+        h1.pack_start(f2, expand=False, fill=False, padding=5)
         ttools= gtk.Table(3, 2)
         f2.add(ttools)
 
