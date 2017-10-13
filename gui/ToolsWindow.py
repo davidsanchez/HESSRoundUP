@@ -32,7 +32,7 @@ class ToolsWindow(gtk.HBox):
         self.fin = gtk.FileChooserButton("file")
 #        self.fin.set_current_folder("")
 #TODO
-        self.fin.set_current_folder("$HOME")
+        self.fin.set_current_folder("$HESSUSER/RoundUP/Maps")
         self.fin.set_action(gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
         self.fin.show()
 
@@ -353,7 +353,7 @@ class ToolsWindow(gtk.HBox):
 
             root_opts =  "-l"
             MinSig = self.MinSig_entry.get_value();
-            batchfile.write_line("root %s '%s.C+(\"%s,%d,%i\")'" % (root_opts, "hotspotposition",folder+"/"+prefix,MinSig,1))
+            batchfile.write_line("root %s '%s.C+(\"%s\",%d,%i)'" % (root_opts, "hotspotposition",folder+"/"+prefix,MinSig,1))
 #               batchfile.save_result_file(".", "*.root", ".")
                 
             r, jobname = batchfile.submit(terminal=True)
@@ -403,7 +403,7 @@ class ToolsWindow(gtk.HBox):
 
             root_opts =  "-l"
             MinSig = self.MinSig_entry.get_value();
-            batchfile.write_line("root %s '%s.C+(\"%s,%d,%i\")'" % (root_opts, "hotspotposition",folder+"/"+prefix,MinSig,0))
+            batchfile.write_line("root %s '%s.C+(\"%s\",%d,%i)'" % (root_opts, "hotspotposition",folder+"/"+prefix,MinSig,0))
 #               batchfile.save_result_file(".", "*.root", ".")
                 
             r, jobname = batchfile.submit(terminal=True)
