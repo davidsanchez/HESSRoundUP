@@ -104,7 +104,7 @@ class ToolsWindow(gtk.HBox):
         self.exec_button = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start ONOFFTest")
         self.exec_button.connect("clicked", self.start_ONOFFTest)
         # h1.pack_start(self.exec_button, expand=False, fill=False, padding=1)
-        ttools.attach(self.exec_button, 1, 2, ,3,4, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        ttools.attach(self.exec_button, 1, 2,3,4, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
 
 
         #Start button
