@@ -57,6 +57,7 @@ class ToolsWindow(gtk.HBox):
         self.ra_mode = True
         self.ra = 0.
         self.dec = 0.
+        self.MinSig = 4.5
   
         f = gtk.Frame("Target ")
         h1.pack_start(f, expand=False, fill=False, padding=5)
@@ -124,7 +125,14 @@ class ToolsWindow(gtk.HBox):
         #Start button
         self.exec_buttonFindspot = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start FindHotSpot")
         self.exec_buttonFindspot.connect("clicked", self.start_FindHotSpot)
-        h1.pack_start(self.exec_buttonFindspot, expand=False, fill=False, padding=1)
+        # h1.pack_start(self.exec_buttonFindspot, expand=False, fill=False, padding=1)
+        ttools.attach(self.exec_buttonFindspot, 2,3, 3,4, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+
+
+        self.MinSig_entry = gtk.SpinButton(gtk.Adjustment(self.MinSig, 0, 90, .1), .1, 4)
+        self.MinSig_entry.set_numeric(True)
+        self.MinSig_entry.set_size_request(30, -1);
+        t3.attach(self.MinSig_entry, 2, 3, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1) 
 
 
         #Start button
@@ -330,7 +338,8 @@ class ToolsWindow(gtk.HBox):
 
 
             root_opts =  "-l"
-            batchfile.write_line("root %s '%s.C+(\"%s\")'" % (root_opts, "hotspotposition",folder+"/"+prefix))
+            MinSig = self.MinSig_entry.get_value();
+            batchfile.write_line("root %s '%s.C+(\"%s,%d,%i\")'" % (root_opts, "hotspotposition",folder+"/"+prefix,MinSig,1))
 #               batchfile.save_result_file(".", "*.root", ".")
                 
             r, jobname = batchfile.submit(terminal=True)
