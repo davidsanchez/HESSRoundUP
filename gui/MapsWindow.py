@@ -71,8 +71,7 @@ class MapsWindow(gtk.HBox):
 
 
 
-
-        t3.attach(gtk.Label("Target"), 0, 1, 2, 3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        t3.attach(gtk.Label("Target Name"), 0, 1, 2, 3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
         self.target_list = gtk_supp.EntryCompletion(0)
         self.target_list.set_size_request(150, -1)
         t3.attach(self.target_list, 1, 2, 2, 3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
@@ -107,6 +106,14 @@ class MapsWindow(gtk.HBox):
         self.dec_entry.set_numeric(True)
         self.dec_entry.set_size_request(30, -1);
         t3.attach(self.dec_entry, 2, 3, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1) 
+        self.dec_entry.set_sensitive(False)
+
+
+        self.target_list.set_sensitive(False)
+        self.filter_pos_button.set_sensitive(False)
+        self.ra_label.set_sensitive(False)
+        self.ra_entry.set_sensitive(False)
+        self.dec_label.set_sensitive(False)
         self.dec_entry.set_sensitive(False)
 
        

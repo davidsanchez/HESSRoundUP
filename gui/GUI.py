@@ -17,6 +17,7 @@ from display.python import MainGUI, Storage
 from MapsWindow import MapsWindow
 from TimeMapsWindow import TimeMapsWindow
 from ToolsWindow import ToolsWindow
+from CalibCheckWindow import CalibCheckWindow
 from AnalyseWindow import AnalyseWindow
 #from Environment import EnvironmentGUI
 
@@ -42,6 +43,7 @@ def main():
     window.add_page("Maps Generation", MapsWindow(window))
 #    window.add_page("Time Maps Generation", TimeMapsWindow(window))
     window.add_page("Tools", ToolsWindow(window))
+    window.add_page("Calibration", CalibCheckWindow(window))
 #    window.init(envtab=EnvironmentGUI(window))
     window.init()
     gobject.threads_init()

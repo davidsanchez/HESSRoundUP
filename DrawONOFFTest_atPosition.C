@@ -85,7 +85,7 @@
 #include <TDirectory.h>
 #include <TRolke.h>
 
-double DrawONOFFTest_atPosition(const char* Resfile, const char* PerRunMapsFile,  double l, double b, bool display, const char *OutfilePrefix = "out")
+double DrawONOFFTest_atPosition(const char* Resfile, const char* PerRunMapsFile,  double l, double b, bool display, const char *OutfilePrefix = "out",bool UseConfigTarget=true)
 {
   //Opening the results file
   TFile *fileResults = TFile::Open(Resfile);
@@ -97,11 +97,24 @@ double DrawONOFFTest_atPosition(const char* Resfile, const char* PerRunMapsFile,
   ParisAnalysis::AnalysisConfig *Config =  hess->Handle("", (ParisAnalysis::AnalysisConfig *) 0);
   Config->LoadAllMembers();
   
+  double UserLambda,UserBeta;
+
+  UserLambda = l;
+  UserBeta = b;
+
+  if(UseConfigTarget){
+    std::cout << "Using target position from Results File" << std::endl;
+    UserLambda = Config->GetTargetRa();
+    UserBeta = Config->GetTargetDec();
+    std::cout << "UserLambda = " << UserLambda << ", UserBeta = " << UserBeta << std::endl;
+  }
+
+
   Sash::DataSet *run_results = (Sash::DataSet *)fileResults->Get("run_results");
   gROOT->cd();
 
-  Stash::Coordinate targetpos(Stash::Lambda(l,Stash::Angle::Degrees),
-			      Stash::Beta(b,Stash::Angle::Degrees),
+  Stash::Coordinate targetpos(Stash::Lambda(UserLambda,Stash::Angle::Degrees),
+			      Stash::Beta(UserBeta,Stash::Angle::Degrees),
 			      Config->GetSystem());
   
   TFile *file = TFile::Open(PerRunMapsFile);

@@ -58,11 +58,19 @@ class ToolsWindow(gtk.HBox):
         self.ra = 0.
         self.dec = 0.
         self.MinSig = 4.5
+        self.UseConfigTarget = 1
   
         f = gtk.Frame("Target ")
         h1.pack_start(f, expand=False, fill=False, padding=5)
         t3= gtk.Table(3, 3)
         f.add(t3)
+
+        self.UseConfigTarget_button = SignalWidgets.CheckButton("Config from File results")
+        self.UseConfigTarget_button.set_active(True)
+        t3.attach(self.UseConfigTarget_button,0, 3, 1, 2, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
+        self.UseConfigTarget_button.connect("toggled", self.changed_UseConfigTarget) 
+
+
 
 
         t3.attach(gtk.Label("Target Name"), 0, 1, 2, 3, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1)
@@ -95,7 +103,12 @@ class ToolsWindow(gtk.HBox):
         self.dec_entry.set_size_request(30, -1);
         t3.attach(self.dec_entry, 2, 3, 4,5, gtk.EXPAND | gtk.FILL, gtk.EXPAND | gtk.FILL, 5, 1) 
 
-
+        self.target_list.set_sensitive(False)
+        self.filter_pos_button.set_sensitive(False)
+        self.ra_label.set_sensitive(False)
+        self.ra_entry.set_sensitive(False)
+        self.dec_label.set_sensitive(False)
+        self.dec_entry.set_sensitive(False)
 
         #Start button
         self.exec_button = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "ONOFF Test @ Pos")
@@ -150,20 +163,15 @@ class ToolsWindow(gtk.HBox):
 
 
         #Start button
-        self.exec_buttonDrawMap = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start Open Results")
+        self.exec_buttonDrawMap = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Open Results Maps")
         self.exec_buttonDrawMap.connect("clicked", self.start_OpenResults)
         h1.pack_start(self.exec_buttonDrawMap, expand=False, fill=False, padding=1)
 
 
-       #Start button
-        self.exec_all = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start All")
-        self.exec_all.connect("clicked", self.start_all)
-        h1.pack_start(self.exec_all, expand=False, fill=False, padding=1)
-
 #        tsum= gtk.Table(3, 3)
 #        f.add(tsum)
 
-        self.exec_MakeSummary = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Start MakeSummary")
+        self.exec_MakeSummary = gtk_supp.PixmapButton(gtk.STOCK_EXECUTE, "Make Summary")
         self.exec_MakeSummary.connect("clicked", self.start_MakeSummary)
         h1.pack_start(self.exec_MakeSummary, expand=False, fill=False, padding=1)
 
@@ -187,6 +195,25 @@ class ToolsWindow(gtk.HBox):
         h1.pack_start(swin, expand=True, fill=True, padding=5)
 
 
+    def changed_UseConfigTarget(self, *args):
+        self.UseConfigTarget = 0;
+        if self.UseConfigTarget_button.get_active() :
+              self.UseConfigTarget = 1;
+              self.target_list.set_sensitive(False)
+              self.filter_pos_button.set_sensitive(False)
+              self.ra_label.set_sensitive(False)
+              self.ra_entry.set_sensitive(False)
+              self.dec_label.set_sensitive(False)
+              self.dec_entry.set_sensitive(False)
+        else:
+              self.target_list.set_sensitive(True)
+              self.filter_pos_button.set_sensitive(True)
+              self.ra_label.set_sensitive(True)
+              self.ra_entry.set_sensitive(True)
+              self.dec_label.set_sensitive(True)
+              self.dec_entry.set_sensitive(True)
+
+
     def load_run_list(self, widget=None, selection=None, * args):
         '''
         load file list from the folder
@@ -205,15 +232,6 @@ class ToolsWindow(gtk.HBox):
 
         self.mainwindow.normal_cursor()
   
-    def start_all(self, widget=None, selection=None, * args):
-        '''
-        do all
-        '''
-        self.start_findPos(widget=widget, selection=selection, * args)
-        self.start_OpenResults(widget=widget, selection=selection, * args)
-        self.start_ONOFFTest(widget=widget, selection=selection, * args)
-        self.start_FindHotSpot(widget=widget, selection=selection, * args)
-
 
     def start_findPos(self, widget=None, selection=None, * args):
         '''
@@ -303,7 +321,7 @@ class ToolsWindow(gtk.HBox):
 
             ra = self.ra_entry.get_value();
             dec = self.dec_entry.get_value();
-            batchfile.write_line("root %s '%s.C++(\"%s\",\"%s\",%s,%s,%s,\"%s\")'" % (root_opts, "DrawONOFFTest_atPosition",folder+"/"+rootfiles[0],onoff,ra,dec,"true",folder+"/"+prefix))
+            batchfile.write_line("root %s '%s.C++(\"%s\",\"%s\",%s,%s,%s,\"%s\",%s)'" % (root_opts, "DrawONOFFTest_atPosition",folder+"/"+rootfiles[0],onoff,ra,dec,"true",folder+"/"+prefix,self.UseConfigTarget))
 #               batchfile.save_result_file(".", "*.root", ".")
                 
             r, jobname = batchfile.submit(terminal=True)
