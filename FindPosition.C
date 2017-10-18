@@ -1,14 +1,32 @@
-bool FindPosition(double l = 329.716938, double b = -30.225588	, const char* Prefix = "")
+bool FindPosition(double l = 329.716938, double b = -30.225588	, const char* Prefix = "",bool UseConfigTarget=true,const char* Resfile)
 {
-// double Eth
 
-//  if(l > 180){
-//    l = l-360;
-//    std::cout << "automatic change : l -> " << l << std::endl;
-//  }
-  Stash::Coordinate targetpos(Stash::Lambda(l,Stash::Angle::Degrees),
-			      Stash::Beta(b,Stash::Angle::Degrees),
-			      Crash::GetRADecJ2000System());
+  std::cout << Resfile.str().c_str() << std::endl;
+
+  TFile *fileResults = TFile::Open(Resfile.str().c_str());
+  gROOT->cd();
+  Sash::DataSet *results = (Sash::DataSet *)fileResults->Get("results");
+  results->GetEntry(0);
+  
+  Sash::HESSArray *hess = Sash::Folder::GetFolder(0)->GetHESSArray();
+  ParisAnalysis::AnalysisConfig *Config =  hess->Handle("", (ParisAnalysis::AnalysisConfig *) 0);
+  Config->LoadAllMembers();
+  
+  double UserLambda,UserBeta;
+
+  UserLambda = l;
+  UserBeta = b;
+
+  if(UseConfigTarget){
+    std::cout << "Using target position from Results File" << std::endl;
+    UserLambda = Config->GetTargetRa();
+    UserBeta = Config->GetTargetDec();
+    std::cout << "UserLambda = " << UserLambda << ", UserBeta = " << UserBeta << std::endl;
+  }
+  
+  Stash::Coordinate targetpos(Stash::Lambda(UserLambda,Stash::Angle::Degrees),
+            Stash::Beta(UserBeta,Stash::Angle::Degrees),
+            Config->GetSystem());
   
   std::ostringstream fradialfile;
   fradialfile << Prefix<< "_roundup_RadialMaps.root";

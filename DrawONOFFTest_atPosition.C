@@ -332,6 +332,6 @@ double DrawONOFFTest_atPosition(const char* Resfile, const char* PerRunMapsFile,
   fileResults->Close();
 
 
-
+  std::cout<<"Max significance found = "<<maxsig<<std::endl;
   return maxsig;
 }

@@ -32,7 +32,7 @@ class ToolsWindow(gtk.HBox):
         self.fin = gtk.FileChooserButton("file")
 #        self.fin.set_current_folder("")
 #TODO
-        self.fin.set_current_folder("$HESSUSER/RoundUP/Maps")
+        self.fin.set_current_folder("$HESSUSER/RoundUp/Maps")
         self.fin.set_action(gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER)
         self.fin.show()
 
@@ -270,7 +270,7 @@ class ToolsWindow(gtk.HBox):
             root_opts =  "-q -b"
             ra = self.ra_entry.get_value();
             dec = self.dec_entry.get_value();
-            batchfile.write_line("root %s '%s.C(%s,%s,\"%s\")'" % (root_opts, "FindPosition",ra,dec,folder+"/"+prefix))
+            batchfile.write_line("root %s '%s.C(%s,%s,\"%s\",%s,%s)'" % (root_opts, "FindPosition",ra,dec,folder+"/"+prefix,self.UseConfigTarget,rootfiles[0]))
 #               batchfile.save_result_file(".", "*.root", ".")
                 
             r, jobname = batchfile.submit(terminal=True)
